@@ -1,7 +1,7 @@
 import "./App.css";
 import React from "react";
 
-let IMAGE_HEIGHT = 200;
+const IMAGE_HEIGHT = 200;
 
 class Image extends React.Component {
     constructor(props) {
@@ -45,15 +45,10 @@ class Image extends React.Component {
                     return response.json();
                 })
                 .then((arrayOfData) => {
-                    const buffArray = [];
-                    arrayOfData.forEach((imageData) => {
-                        console.log(imageData);
-                        buffArray.push(imageData);
-                    });
-                    this.setState({
-                        images: this.state.images.concat(buffArray),
+                    this.setState(prevState => ({
+                        images: prevState.images.concat(arrayOfData),
                         isFetching: false
-                    });
+                    }));
                 });
         }
     }
@@ -74,8 +69,28 @@ class Image extends React.Component {
     }
 }
 
+function Counter(props){
+    const handleClick = () => {
+
+    }
+    return (<div>
+        <p>Count of cats: {props.catsCount}</p>
+        <button onClick={handleClick}>delete {props.countToDelete} cats</button>
+    </div>);
+}
+
+function InputForm(props){
+    return (
+      <input type="number"  min="0"/>
+    );
+}
+
 function App(props) {
-    return <Image/>;
+    return <div>
+        <Counter  catsCount={111} countToDelete={222}/>
+        <InputForm/>
+        <Image/>
+    </div>
 }
 
 export default App;
