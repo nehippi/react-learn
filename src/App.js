@@ -26,6 +26,7 @@ class Image extends React.Component {
 
     componentDidMount() {
         this.addCat();
+        this.props.childFunc(this.deleteCat);
         window.addEventListener("scroll", this.handleScroll);
     }
 
@@ -34,21 +35,35 @@ class Image extends React.Component {
     }
 
 
+
+    deleteCat = () =>{
+        const countToDelete = this.props.countToDelete
+        this.setState((prevState) => {
+            const buffArray = prevState.images;
+            buffArray.slice(0,countToDelete);
+            return {images: buffArray}
+        });
+    }
+
     addCat = () => {
         if (!this.state.isFetching) {
             console.log("addCat")
             this.setState({
                 isFetching: true
             });
-            fetch("https://api.thecatapi.com/v1/images/search?limit=10")
+            fetch("https://api.thecatapi.com/v1/images/search?limit=5")
                 .then((response) => {
                     return response.json();
                 })
                 .then((arrayOfData) => {
-                    this.setState(prevState => ({
-                        images: prevState.images.concat(arrayOfData),
-                        isFetching: false
-                    }));
+                    this.setState((prevState) => {
+                        const buffArray = prevState.images.concat(arrayOfData)
+                        this.props.updateParentState(buffArray.length);
+                        return {
+                            images: buffArray,
+                            isFetching: false
+                        }
+                    });
                 });
         }
     }
@@ -61,6 +76,9 @@ class Image extends React.Component {
                     <img src={data.url} height={IMAGE_HEIGHT} alt="could not download"/>
                 </div>)
         });
+        if(this.state.images.length>20){
+            this.deleteCat();
+        }
         return (
             <div>
                 {cats}
@@ -69,28 +87,75 @@ class Image extends React.Component {
     }
 }
 
-function Counter(props){
-    const handleClick = () => {
+
+
+class InputForm extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(e) {
+        this.props.onCountChange(e.target.value);
+    }
+
+    render() {
+        const count = this.props.count;
+        return (
+            <fieldset>
+                <legend>Enter count</legend>
+                <input type="number" value={count}
+                       onChange={this.handleChange}/>
+            </fieldset>
+        );
+    }
+}
+
+
+class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            count: null,
+            countToDelete: null,
+            childFunc: null
+        };
 
     }
-    return (<div>
-        <p>Count of cats: {props.catsCount}</p>
-        <button onClick={handleClick}>delete {props.countToDelete} cats</button>
-    </div>);
-}
 
-function InputForm(props){
-    return (
-      <input type="number"  min="0"/>
-    );
-}
+    render() {
+        const divStyle = {
+            position: 'sticky',
+            top: '20px',
+            marginLeft: '400px',
+            width: '200px',
+        };
 
-function App(props) {
-    return <div>
-        <Counter  catsCount={111} countToDelete={222}/>
-        <InputForm/>
-        <Image/>
-    </div>
+        const handleCountChange = (countToDelete) => {
+            this.setState({countToDelete: countToDelete});
+        }
+        const updateParentState = (count) => {
+            this.setState({count: count});
+        }
+
+        const setFunction = (func) => {
+            this.setState({childFunc: func})
+        }
+
+        const handleClick = () => {
+        this.state.childFunc();
+        }
+
+        const countToDelete = this.state.countToDelete;
+        return (<div>
+            <div style={divStyle}>
+                <p>Count of cats: {this.state.count}</p>
+                <button onClick={handleClick}>delete {countToDelete} cats</button>
+                <InputForm  onCountChange={handleCountChange} count={countToDelete}/>
+            </div>
+            <Image updateParentState={updateParentState} childFunc={setFunction()}/>
+        </div>);
+    }
 }
 
 export default App;
