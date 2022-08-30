@@ -39,19 +39,19 @@ class Image extends React.Component {
     deleteCat = () =>{
         const countToDelete = this.props.countToDelete
         this.setState((prevState) => {
-            const buffArray = prevState.images;
-            buffArray.slice(0,countToDelete);
+            const buffArray = prevState.images.slice(countToDelete,prevState.images.length);
+            this.props.updateParentState(buffArray.length);
             return {images: buffArray}
         });
+
     }
 
     addCat = () => {
         if (!this.state.isFetching) {
-            console.log("addCat")
             this.setState({
                 isFetching: true
             });
-            fetch("https://api.thecatapi.com/v1/images/search?limit=5")
+            fetch("https://api.thecatapi.com/v1/images/search?limit=10")
                 .then((response) => {
                     return response.json();
                 })
@@ -76,9 +76,6 @@ class Image extends React.Component {
                     <img src={data.url} height={IMAGE_HEIGHT} alt="could not download"/>
                 </div>)
         });
-        if(this.state.images.length>20){
-            this.deleteCat();
-        }
         return (
             <div>
                 {cats}
@@ -116,8 +113,8 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            count: null,
-            countToDelete: null,
+            count: 0,
+            countToDelete: 0,
             childFunc: null
         };
 
@@ -153,7 +150,7 @@ class App extends React.Component {
                 <button onClick={handleClick}>delete {countToDelete} cats</button>
                 <InputForm  onCountChange={handleCountChange} count={countToDelete}/>
             </div>
-            <Image updateParentState={updateParentState} childFunc={setFunction()}/>
+            <Image updateParentState={updateParentState} childFunc={setFunction} countToDelete={countToDelete}/>
         </div>);
     }
 }
