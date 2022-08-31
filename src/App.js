@@ -76,7 +76,7 @@ class App extends React.Component {
 
     deleteCat = () => {
         if (this.state.countToDelete !== 0) {
-            const countToDelete = this.state.countToDelete
+            const {countToDelete} = this.state;
             this.setState((prevState) => {
                 const images = prevState.images.slice(countToDelete);
                 return {
@@ -115,14 +115,14 @@ class App extends React.Component {
             width: '200px',
         };
 
-        const countToDelete = this.state.countToDelete;
+        const {countToDelete,images} = this.state;
         return (<div>
             <div style={divStyle}>
-                <p>Count of cats: {this.state.images.length}</p>
+                <p>Count of cats: {images.length}</p>
                 <button onClick={this.deleteCat}>delete {countToDelete} cats</button>
                 <InputForm onCountChange={this.handleCountChange} count={countToDelete}/>
             </div>
-            <ImageList data={this.state.images}/>
+            <ImageList data={images}/>
         </div>);
     }
 }
