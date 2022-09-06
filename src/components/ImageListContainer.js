@@ -1,10 +1,9 @@
 import React from "react";
-import {addImages} from "../actions";
+import {addImages, endDowloadingImages, startDowloadingImages} from "../actions";
 import {connect} from "react-redux";
 import ImageList from "./ImageList";
 import PropTypes from "prop-types";
-
-const IMAGE_HEIGHT = 200;
+import {IMAGE_HEIGHT} from "../constants";
 
 class ImageListContainer extends React.Component {
     constructor(props) {
@@ -16,13 +15,13 @@ class ImageListContainer extends React.Component {
 
     handleScroll = (e) => {
         const bottom = e.target.scrollingElement.scrollHeight - IMAGE_HEIGHT - e.target.scrollingElement.scrollTop <= e.target.scrollingElement.clientHeight + 1;
-        if (bottom) {
-            this.addCat();
+        if (bottom&&!this.props.isFetching) {
+            this.props.addImagesToStore();
         }
     }
 
     componentDidMount() {
-        this.addCat();
+        this.props.addImagesToStore();
         window.addEventListener("scroll", this.handleScroll);
     }
 
@@ -30,24 +29,6 @@ class ImageListContainer extends React.Component {
         window.removeEventListener("scroll", this.handleScroll);
     }
 
-    addCat = () => {
-        if (!this.state.isFetching) {
-            this.setState({
-                isFetching: true
-            });
-            fetch("https://api.thecatapi.com/v1/images/search?limit=10")
-                .then((response) => {
-                    return response.json();
-                })
-                .then((arrayOfData) => {
-                    this.props.addImagesToStore(arrayOfData)
-                    this.setState({
-                        isFetching: false
-                    });
-                });
-
-        }
-    }
 
     render() {
         return (
@@ -60,14 +41,31 @@ class ImageListContainer extends React.Component {
 function mapStateToProps(state) {
     return {
         images: state.images,
+        isFetching: state.isFetching,
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        addImagesToStore: (data) => dispatch(addImages(data)),
+        addImagesToStore: () => dispatch(addCat()),
     }
 }
+
+function addCat(){
+    return (dispatch) => {
+        dispatch(startDowloadingImages())
+        fetch("https://api.thecatapi.com/v1/images/search?limit=10")
+            .then((response) => {
+                return response.json();
+            })
+            .then((arrayOfData) => {
+                dispatch(addImages(arrayOfData));
+                dispatch(endDowloadingImages())
+            });
+
+    }
+}
+
 
 ImageListContainer.defaultProps = {
     images: [],

@@ -7,19 +7,18 @@ function DeleteButton(props) {
     const deleteCat = () => {
         const countToDelete = props.countToDelete;
         if (countToDelete !== 0) {
-            props.deleteImages(countToDelete);
+            props.deleteImages();
         }
     }
     return (<button onClick={deleteCat}>delete {props.countToDelete} cats</button>)
 }
 
 const mapStateToProps = state => ({
-    countToDelete: Number(state.countToDelete),
-    images: state.images
+    countToDelete: state.countToDelete,
 })
 
 const mapDispatchToProps = dispatch => ({
-    deleteImages: (countToDelete) => dispatch(deleteImage(countToDelete))
+    deleteImages: () => dispatch(deleteImage())
 })
 
 DeleteButton.defaultProps = {

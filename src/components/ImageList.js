@@ -1,8 +1,7 @@
 import React from "react";
-import {connect} from 'react-redux'
 import PropTypes from "prop-types";
+import {IMAGE_HEIGHT} from "../constants";
 
-const IMAGE_HEIGHT = 200; //todo: clarify how to define common constants
 
 class ImageList extends React.Component {
     render() {
@@ -25,7 +24,8 @@ ImageList.defaultProps = {
 }
 
 ImageList.propTypes = {
-    countToDelete: PropTypes.array,
+    data: PropTypes.array,
 }
 
-export default connect()(ImageList);
+export default ImageList
+

@@ -18,7 +18,7 @@ function InputForm(props) {
 }
 
 const mapStateToProps = state => ({
-    countToDelete: Number(state.countToDelete)
+    countToDelete: state.countToDelete
 })
 
 const mapDispatchToProps = dispatch => ({
