@@ -13,7 +13,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 const initialState = {
     countToDelete: 0,
-    images: []
+    images: [],
+    isFetching: false,
 };
 
 const store = createStore(reducer,initialState,applyMiddleware(thunk))
