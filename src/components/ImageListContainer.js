@@ -34,7 +34,6 @@ class ImageListContainer extends React.Component {
 function mapStateToProps(state) {
     return {
         images: state.images,
-        isFetching: state.isFetching,
     }
 }
 
