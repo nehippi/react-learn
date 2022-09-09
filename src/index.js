@@ -1,28 +1,19 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import {applyMiddleware, createStore} from 'redux'
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import './index.css';
-import thunk from 'redux-thunk';
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import reducer from "./reducers/reducer";
+import {store} from "./store";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = document.getElementById('root');
 
-const initialState = {
-    countToDelete: 0,
-    images: [],
-    isFetching: false,
-};
-
-const store = createStore(reducer,initialState,applyMiddleware(thunk))
-root.render(
-    <Provider store={store}>
+ReactDOM.render(<Provider store={store}>
     <App />
-    </Provider>
-);
+</Provider>, root);
+
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

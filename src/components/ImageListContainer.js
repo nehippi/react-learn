@@ -5,7 +5,7 @@ import ImageList from "./ImageList";
 import PropTypes from "prop-types";
 import {IMAGE_HEIGHT} from "../constants";
 
-class ImageListContainer extends React.Component {
+export class ImageListContainer extends React.Component {
     handleScroll = (e) => {
         const bottom = e.target.scrollingElement.scrollHeight - IMAGE_HEIGHT - e.target.scrollingElement.scrollTop <= e.target.scrollingElement.clientHeight + 1;
         if (bottom) {

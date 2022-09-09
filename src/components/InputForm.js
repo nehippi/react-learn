@@ -3,7 +3,7 @@ import {updateCountToDelete} from "../actions";
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 
-function InputForm(props) {
+export function InputForm(props) {
     const handleChange = (e) => {
         props.updateCountToDelete(e.target.value);
     }
