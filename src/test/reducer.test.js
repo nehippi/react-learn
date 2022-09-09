@@ -9,7 +9,7 @@ test('pass addImages action', () => {
         type: ADD,
         data: ["third", "fourth"]
     }
-    expect(reducer(state, action)).toStrictEqual({...state, images: [...state.images, ...action.data]});
+    expect(reducer(state, action)).toEqual({images: ["first", "second", "third", "fourth"]});
 })
 
 test('pass deleteImage action', () => {
@@ -20,7 +20,7 @@ test('pass deleteImage action', () => {
     const action = {
         type: DELETE,
     }
-    expect(reducer(state, action)).toStrictEqual({...state, images: state.images.slice(state.countToDelete)});
+    expect(reducer(state, action)).toEqual({countToDelete: 1, images: ["second"]});
 })
 
 test('pass updateCountToDelete action', () => {
@@ -33,7 +33,10 @@ test('pass updateCountToDelete action', () => {
         type: UPDATE_COUNT,
         countToDelete: 2
     }
-    expect(reducer(state, action)).toStrictEqual({...state, countToDelete: Number(action.countToDelete)});
+    expect(reducer(state, action)).toEqual({
+        images: ["first", "second"],
+        countToDelete: 2
+    });
 })
 
 test('pass startDowloadingImages action', () => {
@@ -44,7 +47,7 @@ test('pass startDowloadingImages action', () => {
     const action = {
         type: START,
     }
-    expect(reducer(state, action)).toStrictEqual({...state, isFetching: true});
+    expect(reducer(state, action)).toEqual({isFetching: true});
 })
 
 test('pass endDowloadingImages action', () => {
@@ -57,7 +60,7 @@ test('pass endDowloadingImages action', () => {
     }
     expect(reducer(state, action)).toStrictEqual({...state, isFetching: false});
 })
-test('pass incorrect action', () => {
+test('Should not modify state if incorrect action is passed', () => {
 
     const state = {
         images: ["first", "second"],

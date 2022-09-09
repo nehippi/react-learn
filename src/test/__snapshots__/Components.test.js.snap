@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Counter should render counter 1`] = `ShallowWrapper {}`;
+
+exports[`Delete button render should render Delete button 1`] = `ShallowWrapper {}`;
+
+exports[`Image list container render should render ImageListContainer 1`] = `ShallowWrapper {}`;
+
+exports[`Image list should render ImageList 1`] = `ShallowWrapper {}`;
+
+exports[`Input Form render should render InputForm 1`] = `ShallowWrapper {}`;

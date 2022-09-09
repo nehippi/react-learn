@@ -6,8 +6,8 @@ import {DeleteButton} from "../components/DeleteButton";
 import ImageList from "../components/ImageList";
 import {ImageListContainer} from "../components/ImageListContainer";
 import {InputForm} from "../components/InputForm";
-import {ADD, END, START} from "../constants";
-import {addCat} from "../actions";
+import {END, START} from "../constants";
+import {addCat, addImages} from "../actions";
 
 configure({adapter: new Adapter()});
 
@@ -38,7 +38,7 @@ describe("Delete button onClick", () => {
 
 describe("Image list", () => {
     it("should render ImageList", () => {
-        const wrapper = shallow(<ImageList images={[]}/>);
+        const wrapper = shallow(<ImageList images={[{id: 1, url: "src/logo.svg"}]}/>);
         expect(wrapper).toMatchSnapshot();
     });
 });
@@ -46,14 +46,15 @@ describe("Image list", () => {
 describe("Image list container render", () => {
     it("should render ImageListContainer", () => {
             const addImagesToStore = jest.fn();
-            const wrapper = shallow(<ImageListContainer images={[]} addImagesToStore={addImagesToStore}/>);
+            const wrapper = shallow(<ImageListContainer images={[{id: 1, url: "src/logo.svg"}]}
+                                                        addImagesToStore={addImagesToStore}/>);
             expect(wrapper).toMatchSnapshot();
         }
     )
     ;
 });
 
-describe("Image list container handle scroll", () => {
+describe("Image list container handle scroll to bottom", () => {
     it("should handle scroll to bottom in ImageListContainer", () => {
             const addImagesToStore = jest.fn();
             const wrapper = shallow(<ImageListContainer images={[]} addImagesToStore={addImagesToStore}/>);
@@ -73,9 +74,29 @@ describe("Image list container handle scroll", () => {
     ;
 });
 
+describe("Image list container handle scroll not in bottom", () => {
+    it("should not call function when in not bottom in ImageListContainer", () => {
+            const addImagesToStore = jest.fn();
+            const wrapper = shallow(<ImageListContainer images={[]} addImagesToStore={addImagesToStore}/>);
+            const event = {
+                target: {
+                    scrollingElement: {
+                        scrollHeight: 1000000,
+                        clientHeight: 0,
+                        scrollTop: 0,
+                    }
+                }
+            }
+            wrapper.simulate('scroll', event)
+            expect(addImagesToStore).not.toBeCalledTimes(2);
+        }
+    )
+    ;
+});
+
 describe("Input Form render", () => {
     it("should render InputForm", () => {
-        const wrapper = shallow(<InputForm countToDelete={1} updateCountToDelete={jest.fn}/>);
+        const wrapper = shallow(<InputForm countToDelete={1} updateCountToDelete={jest.fn()}/>);
         expect(wrapper).toMatchSnapshot();
     });
 });
@@ -86,22 +107,25 @@ describe("Input Form onChange", () => {
         const wrapper = shallow(<InputForm class="a" countToDelete={1} updateCountToDelete={updateCountToDelete}/>);
         const event = {target: {value: 2}}
         wrapper.find("input").simulate('change', event)
-        expect(updateCountToDelete).toHaveBeenCalled()
+        expect(updateCountToDelete).toHaveBeenCalledWith(2)
 
     });
 });
 
 describe('Test thunk action when is not fetching', () => {
     it('addCat should start fetching when isFetching=false', () => {
-        global.fetch = jest.fn().mockResolvedValueOnce([])
+        const obj = {test: 'test'};
+        const body = new Blob([JSON.stringify(obj, null, 2)], {type: 'application/json'});
+        const resp = new Response(body, {status: 200})
+        global.fetch = jest.fn().mockResolvedValueOnce(resp)
         const func = addCat();
         const dispatch = jest.fn();
         const getState = jest.fn(() => ({isFetching: false}));
         return func(dispatch, getState).then(() => {
             expect(dispatch).toHaveBeenCalledWith({type: START});
             expect(fetch).toHaveBeenCalledWith("https://api.thecatapi.com/v1/images/search?limit=10");
-            expect(dispatch).toHaveBeenCalledWith({type: ADD})
             expect(dispatch).toHaveBeenCalledWith({type: END});
+            expect(dispatch).toHaveBeenCalledWith(addImages({"test": "test"}));
         });
 
     })
