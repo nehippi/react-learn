@@ -1,11 +1,47 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Counter should render counter 1`] = `ShallowWrapper {}`;
+exports[`Counter should render counter 1`] = `
+<p>
+  Count of cats: 
+  1
+</p>
+`;
 
-exports[`Delete button render should render Delete button 1`] = `ShallowWrapper {}`;
+exports[`Delete button render should render Delete button 1`] = `
+<button
+  onClick={[Function]}
+>
+  delete 
+  1
+   cats
+</button>
+`;
 
-exports[`Image list container render should render ImageListContainer 1`] = `ShallowWrapper {}`;
+exports[`Image list container render should render ImageListContainer 1`] = `
+<ImageList
+  data={
+    Array [
+      Object {
+        "id": 1,
+        "url": "src/logo.svg",
+      },
+    ]
+  }
+/>
+`;
 
-exports[`Image list should render ImageList 1`] = `ShallowWrapper {}`;
+exports[`Image list should render ImageList 1`] = `<div />`;
 
-exports[`Input Form render should render InputForm 1`] = `ShallowWrapper {}`;
+exports[`Input Form render should render InputForm 1`] = `
+<fieldset>
+  <label>
+    Enter count
+  </label>
+  <input
+    min={0}
+    onChange={[Function]}
+    type="number"
+    value={1}
+  />
+</fieldset>
+`;
