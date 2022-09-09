@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import {IMAGE_HEIGHT} from "../constants";
 
 
-class ImageList extends React.Component {
+export class ImageList extends React.Component {
     render() {
         const cats = this.props.data.map((data) => {
             return (

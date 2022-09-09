@@ -3,7 +3,7 @@ import {deleteImage} from "../actions";
 import {connect} from "react-redux";
 import PropTypes from 'prop-types';
 
-function DeleteButton(props) {
+export function DeleteButton(props) {
     const deleteCat = () => {
         const countToDelete = props.countToDelete;
         if (countToDelete !== 0) {

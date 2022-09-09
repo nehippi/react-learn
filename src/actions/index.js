@@ -24,6 +24,6 @@ export function addCat() {
                 }).catch(() => {
                     dispatch(endDowloadingImages())
                 });
-        }
+        } else return Promise.resolve();
     }
 }

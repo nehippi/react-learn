@@ -1,6 +1,6 @@
 import {ADD, DELETE, END, START, UPDATE_COUNT} from "../constants";
 
-const reducer = (state = {}, action = {}) => {
+export function reducer(state = {}, action = {}) {
     switch (action.type) {
         case ADD:
             return {...state, images: [...state.images, ...action.data]}
@@ -20,4 +20,3 @@ const reducer = (state = {}, action = {}) => {
     }
 };
 
-export default reducer
