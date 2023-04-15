@@ -1,0 +1,13 @@
+
+function preloadImage() {
+	if (document.images) {
+		var img1 = new Image();
+		var img2 = new Image();
+
+		img1.src = "https://w7.pngwing.com/pngs/645/890/png-transparent-computer-icons-logo-whatsapp-whatsapp-text-logo-whatsapp-icon-thumbnail.png";
+		img2.src = "https://w7.pngwing.com/pngs/713/815/png-transparent-whatsapp-iphone-whatsapp-logo-monochrome-black-thumbnail.png";
+	}
+}
+window.onload = function() {
+	preloadImage();
+}
