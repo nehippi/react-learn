@@ -13,9 +13,12 @@ var endDatepicker = new Pikaday({ field: document.getElementById('endDatepicker'
 function processForm(e) {
   e.preventDefault(); //stop the browser and not redirect you
       //save string
-  console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);
+
   var parsedBeginDate = beginDatepicker.getDate();
+  parsedBeginDate.setTime(parsedBeginDate.getTime()-parsedBeginDate.getTimezoneOffset() *60*1000);
+
   var parsedEndDate = endDatepicker.getDate();
+  parsedEndDate.setTime(parsedEndDate.getTime()-parsedEndDate.getTimezoneOffset() *60*1000);
   var testObject = {
     'beginDate': beginDate.value,
     'endDate': endDate.value,
@@ -35,9 +38,8 @@ function readvalues() {
   items = JSON.parse(testObject);
   console.log(items);
   //asign the values
-  console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);
-  beginDatepicker.setDate(items.beginDate);
-  endDatepicker.setDate(items.endDate);
+  beginDatepicker.setDate(new Date(items.beginDateParsed).getTime());
+  endDatepicker.setDate(new Date(items.endDateParsed).getTime());
 }
 
 window.onload = function() { //onload--> starts running when page loads 
