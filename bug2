@@ -1,0 +1,67 @@
+var beginDate = null;
+var endDate = null
+var testObject = null;
+
+var beginDatepicker = new Pikaday({ field: document.getElementById('beginDatepicker'),
+                                    format: 'DD-MMM-YYYY',
+                                    shortFormat: true});
+var endDatepicker = new Pikaday({ field: document.getElementById('endDatepicker'),
+                                  format: 'DD-MMM-YYYY',
+                                  shortFormat: true});
+
+// Declaring processForm() function, we'll use it later when some event occurs
+function processForm(e) {
+  e.preventDefault(); //stop the browser and not redirect you
+      //save string
+  var parsedBeginDate = beginDatepicker.getDate();
+  var parsedEndDate = endDatepicker.getDate();
+  var testObject = {
+    'beginDate': beginDate.value,
+    'endDate': endDate.value,
+    'beginDateParsed': parsedBeginDate,
+    'endDateParsed': parsedEndDate,
+    'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+  };
+
+  // convert object to string -->stringify and set the name of the object as value 
+  localStorage.setItem('testObject', JSON.stringify(testObject));
+  console.log('testObject has been saved.');
+  console.log(testObject);
+}
+
+// Declaring readValues() function, we're gonna call it after the form has been processed
+function readvalues() {
+  testObject = localStorage.getItem('testObject');
+  items = JSON.parse(testObject);
+  console.log(items);
+  console.log(Intl.DateTimeFormat().resolvedOptions().timeZone);
+  //asign the values
+  beginDatepicker.setDate(new Date(items.beginDateParsed).toLocaleString('en-US', {timeZone:items.timeZone,}
+      ));
+  endDatepicker.setDate(items.endDateParsed);
+}
+
+window.onload = function() { //onload--> starts running when page loads 
+  var form = document.getElementById('my-form'); //append event in this form
+  form.addEventListener("submit", processForm);
+  // form.onsubmit = processForm
+  var button = document.getElementById('readvaluesK');
+  //button.addEventListener("click", readvalues);
+  button.onclick = readvalues
+
+
+  //get the value
+  testObject = localStorage.getItem('testObject');
+  //json converts the string to an object -->json.parse
+  items = JSON.parse(testObject);
+
+  //get 2 elements from the form
+  beginDate = document.getElementById('beginDatepicker');
+  endDate = document.getElementById('endDatepicker');
+  //asign the values
+  beginDate.value = items.beginDate;
+  endDate.value = items.endDate;
+  
+  beginDatepicker.setDate(items.beginDateParsed);
+  endDatepicker.setDate(items.endDateParsed);
+}
