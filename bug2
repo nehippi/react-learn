@@ -37,10 +37,19 @@ function readvalues() {
   testObject = localStorage.getItem('testObject');
   items = JSON.parse(testObject);
   console.log(items);
+  var newBeginTime = new Date(items.beginDateParsed)
+  newBeginTime.setUTCHours(newBeginTime.getTimezoneOffset()/60);
+  console.log(newBeginTime.toString())
   //asign the values
-  beginDatepicker.setDate(new Date(items.beginDateParsed).getTime());
-  endDatepicker.setDate(new Date(items.endDateParsed).getTime());
+  beginDatepicker.setDate(newBeginTime);
+  console.log(beginDatepicker.getDate().toString())
+  
+  var newEndTime = new Date(items.endDateParsed)
+  newEndTime.setUTCHours(newEndTime.getTimezoneOffset()/60);
+  console.log(newEndTime.toString())
+  endDatepicker.setDate(newEndTime);
 }
+
 
 window.onload = function() { //onload--> starts running when page loads 
   var form = document.getElementById('my-form'); //append event in this form
