@@ -30,7 +30,9 @@ function processForm(e) {
   localStorage.setItem('testObject', JSON.stringify(testObject));
   console.log('testObject has been saved.');
   console.log(testObject);
+  console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
 }
+
 
 // Declaring readValues() function, we're gonna call it after the form has been processed
 function readvalues() {
@@ -38,18 +40,26 @@ function readvalues() {
   items = JSON.parse(testObject);
   console.log(items);
   var newBeginTime = new Date(items.beginDateParsed)
-  newBeginTime.setUTCHours(newBeginTime.getTimezoneOffset()/60);
-  console.log(newBeginTime.toString())
+  var newEndTime = new Date(items.endDateParsed)
+  newBeginTime.setUTCHours(0);
+  newEndTime.setUTCHours(0);
+  
+  if (24 - moment.utc(items.beginDateParsed).hours() < 12) {
+    newBeginTime.setHours(0);
+    newBeginTime.setDate(newBeginTime.getDate()+1);
+
+    newEndTime.setHours(0);
+    newEndTime.setDate(newEndTime.getDate()+1);
+  } else {
+    newBeginTime.setUTCHours(newBeginTime.getTimezoneOffset()/60);
+    newEndTime.setUTCHours(newEndTime.getTimezoneOffset()/60);
+  }
+
   //asign the values
   beginDatepicker.setDate(newBeginTime);
-  console.log(beginDatepicker.getDate().toString())
-  
-  var newEndTime = new Date(items.endDateParsed)
-  newEndTime.setUTCHours(newEndTime.getTimezoneOffset()/60);
-  console.log(newEndTime.toString())
   endDatepicker.setDate(newEndTime);
+  console.log(Intl.DateTimeFormat().resolvedOptions().timeZone)
 }
-
 
 window.onload = function() { //onload--> starts running when page loads 
   var form = document.getElementById('my-form'); //append event in this form
