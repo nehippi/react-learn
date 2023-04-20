@@ -34,6 +34,7 @@ function processForm(e) {
 }
 
 
+
 // Declaring readValues() function, we're gonna call it after the form has been processed
 function readvalues() {
   testObject = localStorage.getItem('testObject');
@@ -41,19 +42,16 @@ function readvalues() {
   console.log(items);
   var newBeginTime = new Date(items.beginDateParsed)
   var newEndTime = new Date(items.endDateParsed)
-  newBeginTime.setUTCHours(0);
-  newEndTime.setUTCHours(0);
+ newBeginTime.setUTCHours(newBeginTime.getTimezoneOffset() / 60);
+    newEndTime.setUTCHours(newEndTime.getTimezoneOffset() / 60);
   
   if (24 - moment.utc(items.beginDateParsed).hours() < 12) {
-    newBeginTime.setHours(0);
+ newBeginTime.setHours(0);
     newBeginTime.setDate(newBeginTime.getDate()+1);
 
-    newEndTime.setHours(0);
-    newEndTime.setDate(newEndTime.getDate()+1);
-  } else {
-    newBeginTime.setUTCHours(newBeginTime.getTimezoneOffset()/60);
-    newEndTime.setUTCHours(newEndTime.getTimezoneOffset()/60);
-  }
+ newEndTime.setHours(0);
+    newEndTime.setDate(newEndTime.getDate()+1);}
+  
 
   //asign the values
   beginDatepicker.setDate(newBeginTime);
